@@ -28,17 +28,17 @@ feature 'User can create answer', "
       expect(page).to have_content 'answer text'
     end
 
-    # scenario 'asks a question with errors' do
-    #   click_on 'Ask'
-    #
-    #   expect(page).to have_content "Title can't be blank"
-    # end
+    scenario 'post answer with errors' do
+      click_on 'Post Your Answer'
+
+      expect(page).to have_content "Body can't be blank"
+    end
   end
 
-  # scenario 'Unauthenticated user tries to ask a question' do
-  #   visit questions_path
-  #   click_on 'Ask question'
-  #
-  #   expect(page).to have_content 'You need to sign in or sign up before continuing.'
-  # end
+  scenario 'Unauthenticated user tries to post answer' do
+    visit question_path(question)
+    click_on 'Post Your Answer'
+
+    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+  end
 end

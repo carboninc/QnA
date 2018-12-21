@@ -9,6 +9,7 @@ class QuestionsController < ApplicationController
   expose :answer, -> { Answer.new }
 
   def create
+    @exposed_question = current_user.questions.new(question_params)
     if question.save
       redirect_to question_path(question), notice: 'Your question successfully created.'
     else
@@ -26,7 +27,7 @@ class QuestionsController < ApplicationController
 
   def destroy
     question.destroy
-    redirect_to questions_path
+    redirect_to questions_path, notice: 'Your question has been deleted.'
   end
 
   private

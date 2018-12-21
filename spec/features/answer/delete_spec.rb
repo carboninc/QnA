@@ -1,0 +1,38 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+
+feature 'User can delete answer', "
+  If I am the author of the answer
+  Then I would like to be able to remove it.
+  If I am not the author of the answer
+  It is not possible for me to delete the answer.
+" do
+  given(:user) { create(:user) }
+  given(:question) { create(:question, user: user) }
+  given!(:answer) { create(:answer, question: question, user: user) }
+
+  given(:other_user) { create(:user) }
+  given!(:other_answer) { create(:answer, question: question, user: other_user) }
+
+  background do
+    sign_in(user)
+    visit question_path(question)
+  end
+
+  scenario 'User deletes your answer' do
+    expect(page).to have_content answer.body
+
+    click_on 'Delete'
+
+    expect(page).to have_content 'Your answer has been deleted.'
+    expect(page).not_to have_content answer.body
+  end
+
+  scenario 'User trying to delete is not your answer' do
+    within("#answer_#{other_answer.id}") do
+      expect(page).to have_content other_answer.body
+      expect(page).to_not have_link 'Delete'
+    end
+  end
+end

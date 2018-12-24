@@ -14,23 +14,35 @@ feature 'User can delete question', "
   given(:other_user) { create(:user) }
   given!(:other_question) { create(:question, user: other_user) }
 
-  background do
-    sign_in(user)
+  describe 'Authenticated user' do
+    background do
+      sign_in(user)
+    end
+
+    scenario 'delete his question' do
+      expect(page).to have_content question.title
+
+      click_on 'Delete'
+
+      expect(page).to have_content 'Your question has been deleted.'
+      expect(page).not_to have_content question.title
+    end
+
+    scenario 'trying to delete is not his question' do
+      within("#question_#{other_question.id}") do
+        expect(page).to have_content other_question.title
+        expect(page).to_not have_link 'Delete'
+      end
+    end
   end
 
-  scenario 'User deletes your question' do
-    expect(page).to have_content question.title
-
-    click_on 'Delete'
-
-    expect(page).to have_content 'Your question has been deleted.'
-    expect(page).not_to have_content question.title
-  end
-
-  scenario 'User trying to delete is not your question' do
-    within("#question_#{other_question.id}") do
-      expect(page).to have_content other_question.title
-      expect(page).to_not have_link 'Delete'
+  describe 'Unauthenticated user' do
+    scenario 'trying to delete question' do
+      visit questions_path
+      within("#question_#{question.id}") do
+        expect(page).to have_content question.title
+        expect(page).to_not have_link 'Delete'
+      end
     end
   end
 end

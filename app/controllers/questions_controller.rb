@@ -2,12 +2,16 @@
 
 # ------------------------------------------------
 class QuestionsController < ApplicationController
+  before_action :authenticate_user!, except: %i[index show]
+
   expose :questions, -> { Question.all }
   expose :question
+  expose :answer, -> { Answer.new }
 
   def create
+    @exposed_question = current_user.questions.new(question_params)
     if question.save
-      redirect_to question_path(question)
+      redirect_to question_path(question), notice: 'Your question successfully created.'
     else
       render :new
     end
@@ -22,8 +26,12 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    question.destroy
-    redirect_to questions_path
+    if current_user.author?(question)
+      question.destroy
+      redirect_to questions_path, notice: 'Your question has been deleted.'
+    else
+      redirect_to questions_path, notice: 'Oops! You are not the author of the question.'
+    end
   end
 
   private

@@ -1,4 +1,10 @@
-p id = "question_#{question.id}"
-  = question.title
-  - if current_user&.author?(question)
-    = link_to 'Delete', question, method: :delete
+li.list-group-item
+  .row.d-flex.align-items-center
+    .col-1
+    .col-3
+      span id = "question_#{question.id}"
+        = link_to question.title, question_path(question)
+    .col-7
+      - if current_user&.author?(question)
+        nav.nav.justify-content-end
+          = link_to 'Delete', question, method: :delete, class: 'btn btn-danger'

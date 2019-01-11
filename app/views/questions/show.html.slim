@@ -1,13 +1,17 @@
-h1= question.title
-p= question.body
+.row.d-flex.justify-content-center
+  .col-10
+    h1.mt-2 = question.title
 
-.answers
-  = render question.answers
+    p = question.body
 
-.answer-errors
-  = render 'shared/errors', resource: answer
+    .answer-errors
+      = render 'shared/errors', resource: answer
 
-= form_with model: [question, answer], class: 'new-answer' do |f|
-  = f.label :body
-  = f.text_area :body
-  = f.submit 'Post Your Answer'
+    .answers
+      = render question.answers
+
+    = form_with model: [question, answer], class: 'new-answer' do |f|
+      .form-group
+        = f.label :body
+        = f.text_area :body, class: 'form-control'
+      = f.submit 'Post Your Answer', class: 'btn btn-success'

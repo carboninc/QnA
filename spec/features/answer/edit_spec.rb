@@ -45,12 +45,14 @@ feature 'User can edit his answer', "
         click_on 'Save'
 
         expect(page).to have_content answer.body
-        expect(page).to have_content "Body can't be blank"
       end
+      expect(page).to have_content "Body can't be blank"
     end
 
     scenario "tries to edit other user's question" do
-
+      within "#answer-block-#{other_answer.id}" do
+        expect(page).to_not have_link 'Edit'
+      end
     end
   end
 end

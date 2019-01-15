@@ -11,7 +11,6 @@ li.list-group-item id = "answer-block-#{answer.id}"
         = f.submit 'Save', class: 'btn btn-success'
     .col-2.border-left
       nav.nav.justify-content-end
-        - if user_signed_in?
-          = link_to 'Edit', '#', class: 'edit-answer-link btn btn-primary mr-4', data: {answer_id: answer.id}
         - if current_user&.author?(answer)
+          = link_to 'Edit', '#', class: 'edit-answer-link btn btn-primary mr-4', data: {answer_id: answer.id}
           = link_to 'Delete', answer, method: :delete, class: 'btn btn-danger'

@@ -1,10 +1,19 @@
-li.list-group-item
+li.list-group-item id = "question-block-#{question.id}"
   .row.d-flex.align-items-center
     .col-1
     .col-3
       span id = "question_#{question.id}"
         = link_to question.title, question_path(question)
+      = form_with model: question, class: 'hidden', html: {id: "edit-question-#{question.id}"} do |f|
+        .form-group
+          = f.label :title, 'Your question'
+          = f.text_field :title, class: 'form-control'
+        .form-group
+          = f.label :body
+          = f.text_area :body, class: 'form-control'
+        = f.submit 'Save', class: 'btn btn-success'
     .col-7
       - if current_user&.author?(question)
         nav.nav.justify-content-end
+          = link_to 'Edit', '#', class: 'edit-question-link btn btn-primary mr-4', data: {question_id: question.id}
           = link_to 'Delete', question, method: :delete, class: 'btn btn-danger'

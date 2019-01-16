@@ -7,7 +7,6 @@ RSpec.describe QuestionsController, type: :controller do
   let(:question) { create(:question, user: user) }
 
   let(:other_user) { create(:user) }
-  let(:other_question) { create(:question, user: other_user) }
 
   describe 'POST #create' do
     before { login(user) }
@@ -97,7 +96,7 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.title).to eq initial_question[:title]
       end
 
-      it 'redirects to question' do
+      it 'renders update view' do
         expect(response).to render_template :update
       end
     end

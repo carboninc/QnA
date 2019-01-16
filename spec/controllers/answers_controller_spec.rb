@@ -3,8 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create(:question, user: user) }
   let(:user) { create(:user) }
+  let(:question) { create(:question, user: user) }
+
+  let(:other_user) { create(:user) }
 
   describe 'POST #create' do
     before { login(user) }
@@ -59,6 +61,34 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'renders update view' do
         patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'Author tries' do
+      it 'update the answer' do
+        patch :update, params: { id: answer, answer: attributes_for(:answer) }, format: :js
+        answer.reload
+        expect(answer.body).to eq answer.body
+      end
+
+      it 'renders update view' do
+        patch :update, params: { id: answer, answer: attributes_for(:answer) }, format: :js
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'Not author tries' do
+      before { login(other_user) }
+
+      it 'update the answer' do
+        patch :update, params: { id: answer, answer: 'other_answer' }, format: :js
+        answer.reload
+        expect(answer.body).not_to eq 'other_answer'
+      end
+
+      it 'renders update view' do
+        patch :update, params: { id: answer, answer: attributes_for(:answer) }, format: :js
         expect(response).to render_template :update
       end
     end

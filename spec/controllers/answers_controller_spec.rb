@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
   let(:question) { create(:question, user: user) }
+  let!(:answer) { create(:answer, question: question, user: user) }
 
   let(:other_user) { create(:user) }
 
@@ -105,23 +106,51 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'Author tries' do
       it 'delete the answer' do
-        expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+        expect { delete :destroy, params: { id: answer }, format: :js }.to change(Answer, :count).by(-1)
       end
 
-      it 'redirects to question' do
-        delete :destroy, params: { id: answer }
-        expect(response).to redirect_to question_path(question)
+      it 'renders destroy view' do
+        delete :destroy, params: { id: answer }, format: :js
+        expect(response).to render_template :destroy
       end
     end
 
     context 'Not author tries' do
       it 'delete the answer' do
-        expect { delete :destroy, params: { id: other_answer } }.not_to change(Answer, :count)
+        expect { delete :destroy, params: { id: other_answer }, format: :js }.not_to change(Answer, :count)
       end
 
-      it 'redirects to question' do
-        delete :destroy, params: { id: other_answer }
-        expect(response).to redirect_to question_path(question)
+      it 'renders destroy view' do
+        delete :destroy, params: { id: other_answer }, format: :js
+        expect(response).to render_template :destroy
+      end
+    end
+  end
+
+  describe 'POST #mark_best_answer' do
+    context 'The owner of the question is trying to mark the answer as the best' do
+      before { login(user) }
+      before { post :mark_best, params: { id: answer }, format: :js }
+
+      it 'mark best answer' do
+        expect { answer.reload }.to change { answer.best }.from(false).to(true)
+      end
+
+      it 'renders best template' do
+        expect(response).to render_template :mark_best
+      end
+    end
+
+    context 'Not the owner of the question is trying to mark the answer as the best' do
+      before { login(other_user) }
+      before { post :mark_best, params: { id: answer }, format: :js }
+
+      it 'Do not mark the best answer' do
+        expect { answer.reload }.not_to change(answer, :best)
+      end
+
+      it 'renders best template' do
+        expect(response).to render_template :mark_best
       end
     end
   end

@@ -20,6 +20,11 @@ class AnswersController < ApplicationController
     answer.destroy if current_user.author?(answer)
   end
 
+  def mark_best
+    answer.mark_best if current_user.author?(answer.question)
+    @exposed_question = answer.question
+  end
+
   private
 
   def answer_params

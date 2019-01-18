@@ -28,7 +28,7 @@ feature 'User can delete answer', "
     end
 
     scenario 'User trying to delete is not your answer' do
-      within "#answer_#{other_answer.id}" do
+      within "#answer-block-#{other_answer.id}" do
         expect(page).to have_content other_answer.body
         expect(page).to_not have_link 'Delete'
       end
@@ -38,7 +38,7 @@ feature 'User can delete answer', "
   describe 'Unauthenticated user' do
     scenario 'trying to delete answer' do
       visit question_path(question)
-      within("#answer_#{answer.id}") do
+      within("#answer-block-#{answer.id}") do
         expect(page).to have_content answer.body
         expect(page).to_not have_link 'Delete'
       end

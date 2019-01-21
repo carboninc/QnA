@@ -1,5 +1,24 @@
--if answer.persisted?
-  p id ="answer_#{answer.id}"
-    = answer.body
-  - if current_user&.author?(answer)
-    = link_to 'Delete', answer, method: :delete
+li.list-group-item id = "answer-block-#{answer.id}"
+  .row.d-flex.align-items-center
+    .col-10
+      -if answer.persisted?
+        -if answer.best
+          span.badge.badge-primary.mr-4
+            | Best answer!
+        = answer.body
+
+      = form_with model: answer, class: 'hidden', html: {id: "edit-answer-#{answer.id}"} do |f|
+        .form-group
+          = f.label :body, 'Your answer'
+          = f.text_area :body, class: 'form-control'
+        = f.submit 'Save', class: 'btn btn-success'
+    .col-2.border-left
+      nav.nav
+        .row
+          .col-12.border-bottom.pb-3.d-flex.justify-content-center
+            - if current_user&.author?(answer)
+              = link_to 'Edit', '#', class: 'edit-answer-link btn btn-primary mr-3', data: {answer_id: answer.id}
+              = link_to 'Delete', answer, method: :delete, remote: true, class: 'btn btn-danger'
+          .col-12.pt-3
+            - if current_user&.author?(question) && !answer&.best
+              = link_to 'Best answer', mark_best_answer_path(answer), method: :post, remote: true, class: 'best-answer-link btn btn-primary btn-block btn-outline'

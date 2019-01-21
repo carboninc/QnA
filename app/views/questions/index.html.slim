@@ -1,3 +1,15 @@
-p= link_to 'Ask question', new_question_path
+.bg-light.border-bottom
+  .row.d-flex.align-items-center.py-3
+    .col-1
+    .col-3
+      h2 A list of questions
+    .col-7
+      nav.nav.justify-content-end
+        = link_to 'Ask question', new_question_path, class: 'btn btn-success'
+    .col-1
 
-= render questions
+ul.list-group.list-group-flush
+  .question-errors
+
+  .questions
+    = render questions

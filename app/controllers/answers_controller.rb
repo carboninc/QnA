@@ -8,22 +8,21 @@ class AnswersController < ApplicationController
   expose :question, -> { Question.find(params[:question_id]) }
 
   def create
-    @exposed_answer = question.answers.new(answer_params.merge(user_id: current_user.id))
+    @exposed_answer = question.answers.create(answer_params.merge(user_id: current_user.id))
+  end
 
-    if answer.save
-      redirect_to question, notice: 'Your answer successfully created.'
-    else
-      render 'questions/show'
-    end
+  def update
+    answer.update(answer_params) if current_user.author?(answer)
+    @exposed_question = answer.question
   end
 
   def destroy
-    if current_user.author?(answer)
-      answer.destroy
-      redirect_to answer.question, notice: 'Your answer has been deleted.'
-    else
-      redirect_to answer.question, notice: 'Oops! You are not the author of the answer.'
-    end
+    answer.destroy if current_user.author?(answer)
+  end
+
+  def mark_best
+    answer.mark_best if current_user.author?(answer.question)
+    @exposed_question = answer.question
   end
 
   private

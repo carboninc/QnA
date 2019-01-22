@@ -5,7 +5,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
 
   expose :questions, -> { Question.all }
-  expose :question, -> { Question.with_attached_files.find(params[:id]) }
+  expose :question, scope: -> { Question.with_attached_files }
   expose :answer, -> { Answer.new }
 
   def create

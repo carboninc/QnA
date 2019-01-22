@@ -15,6 +15,9 @@ li.list-group-item id = "answer-block-#{answer.id}"
         .form-group
           = f.label :body, 'Your answer'
           = f.text_area :body, class: 'form-control'
+        .form-group
+          = f.label :files
+          = f.file_field :files, multiple: true
         = f.submit 'Save', class: 'btn btn-success'
     .col-2.border-left
       nav.nav

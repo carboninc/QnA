@@ -11,6 +11,9 @@ li.list-group-item id = "question-block-#{question.id}"
         .form-group
           = f.label :body
           = f.text_area :body, class: 'form-control'
+        .form-group
+          = f.label :files, class: 'mr-2'
+          = f.file_field :files, multiple: true
         = f.submit 'Save', class: 'btn btn-success'
     .col-7
       - if current_user&.author?(question)

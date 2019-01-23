@@ -18,7 +18,7 @@ li.list-group-item id = "answer-block-#{answer.id}"
           = f.text_area :body, class: 'form-control'
         .form-group
           = f.label :files
-          = f.file_field :files, multiple: true
+          = f.file_field :files, multiple: true, direct_upload: true
         - if answer.files.attached?
           - answer.files.each do |file|
             div class = "attached_file_id_#{file.id}"

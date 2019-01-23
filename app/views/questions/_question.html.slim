@@ -19,7 +19,7 @@ li.list-group-item id = "question-block-#{question.id}"
                 p = link_to 'Delete File', attachment_path(file), method: :delete, remote: true, class: 'text-danger'
         .form-group
           = f.label :files, class: 'mr-2'
-          = f.file_field :files, multiple: true
+          = f.file_field :files, multiple: true, direct_upload: true
         = f.submit 'Save', class: 'btn btn-success'
     .col-7
       - if current_user&.author?(question)

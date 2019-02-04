@@ -28,3 +28,5 @@
 /config/database.yml
 
 .idea
+.DS_Store
+config/.DS_Store

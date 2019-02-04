@@ -11,6 +11,15 @@ li.list-group-item id = "question-block-#{question.id}"
         .form-group
           = f.label :body
           = f.text_area :body, class: 'form-control'
+        - if question.files.attached?
+          - question.files.each do |file|
+            div class = "attached_file_id_#{file.id}"
+              p = link_to file.filename.to_s, url_for(file)
+              -if current_user&.author?(question)
+                p = link_to 'Delete File', attachment_path(file), method: :delete, remote: true, class: 'text-danger'
+        .form-group
+          = f.label :files, class: 'mr-2'
+          = f.file_field :files, multiple: true, direct_upload: true
         = f.submit 'Save', class: 'btn btn-success'
     .col-7
       - if current_user&.author?(question)

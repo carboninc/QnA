@@ -7,6 +7,10 @@
     .answer-errors
       = render 'shared/errors', resource: answer
 
+    -if question.files.attached?
+      - question.files.each do |file|
+        p = link_to file.filename.to_s, url_for(file)
+
     .answers
       = render question.answers.sort_by_best
 
@@ -14,4 +18,7 @@
       .form-group
         = f.label :body
         = f.text_area :body, class: 'form-control'
+      .form-group
+        = f.label :files, class: 'mr-2'
+        = f.file_field :files, multiple: true
       = f.submit 'Post Your Answer', class: 'btn btn-success'

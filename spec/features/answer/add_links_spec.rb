@@ -9,6 +9,7 @@ feature 'User can add links to answer', "
 " do
   given(:user) { create(:user) }
   given!(:question) { create(:question, user: user) }
+  given(:url) { 'https://google.com' }
   given(:gist_url) { 'https://gist.github.com/vkurennov/743f9367caa1039874af5a2244e1b44c' }
 
   scenario 'User adds link when asks answer', js: true do
@@ -16,13 +17,26 @@ feature 'User can add links to answer', "
     visit question_path(question)
 
     fill_in 'Body', with: 'My answer'
-    fill_in 'Link name', with: 'My Gist'
-    fill_in 'Url', with: gist_url
+
+    within('#links') do
+      within('.nested-fields:nth-child(1)') do
+        fill_in 'Link name', with: 'My Gist'
+        fill_in 'Url', with: gist_url
+      end
+
+      click_on 'Add New List'
+
+      within('.nested-fields:nth-child(2)') do
+        fill_in 'Link name', with: 'Google'
+        fill_in 'Url', with: url
+      end
+    end
 
     click_on 'Post Your Answer'
 
     within '.answers' do
       expect(page).to have_link 'My Gist', href: gist_url
+      expect(page).to have_link 'Google', href: url
     end
   end
 end

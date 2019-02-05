@@ -11,11 +11,12 @@
       - question.files.each do |file|
         p = link_to file.filename.to_s, url_for(file)
 
-    .links
-      p Links:
-      ul
-        - question.links.each do |link|
-          li = link_to link.name, link.url
+    -if question.links.present?
+      .links
+        p Links:
+        ul
+          - question.links.each do |link|
+            li = link_to link.name, link.url
 
 
     .answers
@@ -29,11 +30,5 @@
         = f.label :files, class: 'mr-2'
         = f.file_field :files, multiple: true, direct_upload: true
       p Links:
-      = f.fields_for :links do |l|
-        .form-group
-          = l.label :name, 'Link name'
-          = l.text_field :name, class: 'form-control'
-        .form-group
-          = l.label :url
-          = l.text_field :url, class: 'form-control'
+      = render 'links_nested_form', f: f
       = f.submit 'Post Your Answer', class: 'btn btn-success'

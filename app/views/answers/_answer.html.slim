@@ -11,6 +11,12 @@ li.list-group-item id = "answer-block-#{answer.id}"
         - answer.files.each do |file|
           = render 'answers/file_attached_list', file: file, answer: answer
 
+      .links
+        p Links:
+        ul
+          - answer.links.each do |link|
+            li = link_to link.name, link.url
+
       = form_with model: answer, class: 'hidden', html: {id: "edit-answer-#{answer.id}"} do |f|
         .form-group
           = f.label :body, 'Your answer'

@@ -12,6 +12,10 @@ class QuestionsController < ApplicationController
     question.links.new
   end
 
+  def show
+    answer.links.new
+  end
+
   def create
     @exposed_question = current_user.questions.new(question_params)
     if question.save

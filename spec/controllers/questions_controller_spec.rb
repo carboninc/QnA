@@ -17,6 +17,14 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
+  describe 'GET #show' do
+    before { get :show, params: { id: question } }
+
+    it 'assigns new link for answer' do
+      expect(assigns(:exposed_answer).links.first).to be_a_new(Link)
+    end
+  end
+
   describe 'POST #create' do
     before { login(user) }
 

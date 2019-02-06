@@ -12,10 +12,12 @@ feature 'User can add links to answer', "
   given(:url) { 'https://google.com' }
   given(:gist_url) { 'https://gist.github.com/vkurennov/743f9367caa1039874af5a2244e1b44c' }
 
-  scenario 'User adds link when asks answer', js: true do
+  background do
     sign_in(user)
     visit question_path(question)
+  end
 
+  scenario 'User adds link when asks answer', js: true do
     fill_in 'Body', with: 'My answer'
 
     within('#links') do
@@ -38,5 +40,15 @@ feature 'User can add links to answer', "
       expect(page).to have_link 'My Gist', href: gist_url
       expect(page).to have_link 'Google', href: url
     end
+  end
+
+  scenario 'User adds link with invalid URL when asks answer', js: true do
+    fill_in 'Body', with: 'My answer'
+    fill_in 'Link name', with: 'Error'
+    fill_in 'Url', with: 'Error'
+
+    click_on 'Post Your Answer'
+
+    expect(page).to have_content 'Links url is not a valid URL'
   end
 end

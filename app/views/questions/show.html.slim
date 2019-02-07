@@ -17,14 +17,14 @@
           b Links And Gists:
         ul
           - question.links.each do |link|
-            - if link.gist?
-              li
+            li class = "link-#{link.id}"
+              - if link.gist?
                 p.badge.badge-primary.mr-2 Gist Text:
                 = link.gist_content
-            - else
-              li = link_to link.name, link.url
-
-
+              - else
+                = link_to link.name, link.url
+              - if current_user&.author?(question)
+                = link_to 'Delete Link', link_path(link), method: :delete, remote: true
 
     .answers
       = render question.answers.sort_by_best

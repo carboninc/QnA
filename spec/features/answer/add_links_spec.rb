@@ -10,7 +10,7 @@ feature 'User can add links to answer', "
   given(:user) { create(:user) }
   given!(:question) { create(:question, user: user) }
   given(:url) { 'https://google.com' }
-  given(:gist_url) { 'https://gist.github.com/vkurennov/743f9367caa1039874af5a2244e1b44c' }
+  given(:gist_url) { 'https://gist.github.com/carboninc/42673bd84ded0cfc7093dee0697bd7c4' }
 
   background do
     sign_in(user)
@@ -37,7 +37,7 @@ feature 'User can add links to answer', "
     click_on 'Post Your Answer'
 
     within '.answers' do
-      expect(page).to have_link 'My Gist', href: gist_url
+      expect(page).to have_content 'Test'
       expect(page).to have_link 'Google', href: url
     end
   end

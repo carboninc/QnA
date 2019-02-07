@@ -12,11 +12,18 @@
         p = link_to file.filename.to_s, url_for(file)
 
     -if question.links.present?
-      .links
-        p Links:
+      .links.border.p-2
+        h5
+          b Links And Gists:
         ul
           - question.links.each do |link|
-            li = link_to link.name, link.url
+            - if link.gist?
+              li
+                p.badge.badge-primary.mr-2 Gist Text:
+                = link.gist_content
+            - else
+              li = link_to link.name, link.url
+
 
 
     .answers

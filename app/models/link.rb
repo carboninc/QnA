@@ -3,4 +3,12 @@ class Link < ApplicationRecord
 
   validates :name, presence: true
   validates :url, presence: true, url: true
+
+  def gist?
+    url =~ /gist.github.com/
+  end
+
+  def gist_content
+    GistContentService.new(url.split('/').last).content if gist?
+  end
 end

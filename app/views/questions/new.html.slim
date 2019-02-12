@@ -15,5 +15,9 @@
         = f.label :files, class: 'mr-2'
         = f.file_field :files, multiple: true, direct_upload: true
       p Links:
-      = render 'links_nested_form', f: f
+      #links
+        = f.fields_for :links do |link|
+          = render 'links/link_fields', f: link
+        .links
+          = link_to_add_association 'Add New List', f, :links, class: 'my-3 btn btn-success', partial: 'links/link_fields'
       = f.submit 'Ask', class: 'btn btn-success'

@@ -20,6 +20,13 @@ li.list-group-item id = "question-block-#{question.id}"
         .form-group
           = f.label :files, class: 'mr-2'
           = f.file_field :files, multiple: true, direct_upload: true
+        p Links:
+        #links
+          = f.fields_for :links do |link|
+            div id = "question_nested_form_#{question.id}"
+              = render 'links/link_fields', f: link
+          .links
+            = link_to_add_association 'Add New List', f, :links, class: 'my-3 btn btn-success', partial: 'links/link_fields'
         = f.submit 'Save', class: 'btn btn-success'
     .col-7
       - if current_user&.author?(question)

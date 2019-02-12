@@ -35,6 +35,13 @@ li.list-group-item id = "answer-block-#{answer.id}"
         - if answer.files.attached?
           - answer.files.each do |file|
             = render 'answers/file_attached_list', file: file, answer: answer
+        p Links:
+        #links
+          = f.fields_for :links do |link|
+            div id = "answer_nested_form_#{answer.id}"
+              = render 'links/link_fields', f: link
+          .links
+            = link_to_add_association 'Add New List', f, :links, class: 'my-3 btn btn-success', partial: 'links/link_fields'
         = f.submit 'Save', class: 'btn btn-success'
     .col-2.border-left
       nav.nav

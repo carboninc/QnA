@@ -20,4 +20,13 @@
           = render 'links/link_fields', f: link
         .links
           = link_to_add_association 'Add New List', f, :links, class: 'my-3 btn btn-success', partial: 'links/link_fields'
+      p Add reward:
+      #rewards
+        = f.fields_for :reward do |r|
+          .form-group
+            = r.label :name, 'Reward name'
+            = r.text_field :name, class: 'form-control'
+          .form-group
+            = r.label :image, 'Add Image', class: 'mr-2'
+            = r.file_field :image, direct_upload: true
       = f.submit 'Ask', class: 'btn btn-success'

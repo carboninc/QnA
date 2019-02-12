@@ -5,6 +5,9 @@ li.list-group-item id = "answer-block-#{answer.id}"
         -if answer.best
           span.badge.badge-primary.mr-4
             | Best answer!
+          - if answer.reward.present?
+            .reward
+              = render answer.reward
         = answer.body
 
       - if answer.files.attached?

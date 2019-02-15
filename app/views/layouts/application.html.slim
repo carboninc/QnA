@@ -8,10 +8,10 @@ html
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
 
-  body
+  body.bg-pattern
     = render 'shared/nav'
 
-
-    = yield
-    p.notice = notice
-    p.alert = alert
+    .container.bg-light.shadow
+      = yield
+      p.notice = notice
+      p.alert = alert

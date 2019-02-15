@@ -1,10 +1,12 @@
-nav.navbar.navbar-light style="background-color: #e3f2fd;"
-  = link_to root_path, class: 'navbar-brand' do
-    = image_tag('stack.png', size: '30x30', alt: 'QnA Logo', class: 'd-inline-block align-top')
-    b QnA
-  div.ml-auto
-    - if user_signed_in?
-      = link_to 'Log Out', destroy_user_session_path, method: :delete, class: 'nav-link'
-    - else
-      = link_to 'Log In', new_user_session_path, class: 'mr-3'
-      = link_to 'Sign Up', new_user_registration_path, class: 'btn btn-outline-success'
+nav.navbar.navbar-light.bg-light.shadow-sm.mb-1
+  .container
+    = link_to root_path, class: 'navbar-brand' do
+      = image_tag('stack.png', size: '30x30', alt: 'QnA Logo', class: 'd-inline-block align-top mr-2')
+      |Question &
+      b  Answer
+    div.ml-auto
+      - if user_signed_in?
+        = link_to 'Log Out', destroy_user_session_path, method: :delete, class: 'nav-link'
+      - else
+        = link_to 'Log In', new_user_session_path, class: 'mr-3'
+        = link_to 'Sign Up', new_user_registration_path, class: 'btn btn-outline-success'

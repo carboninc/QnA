@@ -11,6 +11,27 @@
       - question.files.each do |file|
         p = link_to file.filename.to_s, url_for(file)
 
+    -if question.links.present?
+      .links.border.p-2
+        h5
+          b Links And Gists:
+        ul
+          - question.links.each do |link|
+            li class = "link-#{link.id}"
+              - if link.gist?
+                p.badge.badge-primary.mr-2 Gist Text:
+                = link.gist_content
+              - else
+                = link_to link.name, link.url
+              - if current_user&.author?(question)
+                = link_to 'Delete Link', link_path(link), method: :delete, remote: true
+
+    - if question.reward.present?
+      .reward
+        = render question.reward
+
+    hr
+
     .answers
       = render question.answers.sort_by_best
 
@@ -20,5 +41,11 @@
         = f.text_area :body, class: 'form-control'
       .form-group
         = f.label :files, class: 'mr-2'
-        = f.file_field :files, multiple: true
+        = f.file_field :files, multiple: true, direct_upload: true
+      p Links:
+      #links
+        = f.fields_for :links do |link|
+          = render 'links/link_fields', f: link
+        .links
+          = link_to_add_association 'Add New List', f, :links, class: 'my-3 btn btn-success', partial: 'links/link_fields'
       = f.submit 'Post Your Answer', class: 'btn btn-success'

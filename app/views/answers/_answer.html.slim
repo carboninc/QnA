@@ -5,12 +5,28 @@ li.list-group-item id = "answer-block-#{answer.id}"
         -if answer.best
           span.badge.badge-primary.mr-4
             | Best answer!
+          - if answer.reward.present?
+            .reward
+              = render answer.reward
         = answer.body
 
       - if answer.files.attached?
         - answer.files.each do |file|
-          div class = "attached_file_id_#{file.id}"
-            p = link_to file.filename.to_s, url_for(file)
+          = render 'answers/file_attached_list', file: file, answer: answer
+
+      - if answer.links.present?
+        .links
+          p Links And Gists:
+          ul
+            - answer.links.each do |link|
+              li class = "link-#{link.id}"
+                - if link.gist?
+                  p.badge.badge-primary.mr-2 Gist Text:
+                  = link.gist_content
+                - else
+                  = link_to link.name, link.url
+                - if current_user&.author?(answer)
+                  = link_to 'Delete Link', link_path(link), method: :delete, remote: true
 
       = form_with model: answer, class: 'hidden', html: {id: "edit-answer-#{answer.id}"} do |f|
         .form-group
@@ -21,10 +37,14 @@ li.list-group-item id = "answer-block-#{answer.id}"
           = f.file_field :files, multiple: true, direct_upload: true
         - if answer.files.attached?
           - answer.files.each do |file|
-            div class = "attached_file_id_#{file.id}"
-              p = link_to file.filename.to_s, url_for(file)
-              - if current_user&.author?(answer)
-                p = link_to 'Delete File', attachment_path(file), method: :delete, remote: true, class: 'text-danger'
+            = render 'answers/file_attached_list', file: file, answer: answer
+        p Links:
+        #links
+          = f.fields_for :links do |link|
+            div id = "answer_nested_form_#{answer.id}"
+              = render 'links/link_fields', f: link
+          .links
+            = link_to_add_association 'Add New List', f, :links, class: 'my-3 btn btn-success', partial: 'links/link_fields'
         = f.submit 'Save', class: 'btn btn-success'
     .col-2.border-left
       nav.nav

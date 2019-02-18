@@ -2,6 +2,8 @@
 
 # ------------------------------------------------
 class Answer < ApplicationRecord
+  include Voteable
+
   belongs_to :question
   belongs_to :user
   has_one :reward

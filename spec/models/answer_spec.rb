@@ -1,8 +1,15 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require Rails.root.join 'spec/models/concerns/voteable_spec'
 
 RSpec.describe Answer, type: :model do
+  it_behaves_like 'voteable' do
+    let(:user) { create(:user) }
+    let(:question) { create(:question, user: user) }
+    let(:resource) { create(:answer, question: question, user: user) }
+  end
+
   it { should belong_to :question }
   it { should belong_to :user }
   it { should have_one(:reward) }

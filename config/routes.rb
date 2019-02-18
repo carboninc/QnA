@@ -4,8 +4,15 @@ Rails.application.routes.draw do
   root to: 'questions#index'
   devise_for :users
 
-  resources :questions, shallow: true do
-    resources :answers, except: :index do
+  concern :voteable do
+    member do
+      post :vote_up
+      post :vote_down
+    end
+  end
+
+  resources :questions, concerns: [:voteable], shallow: true do
+    resources :answers, concerns: [:voteable], except: :index do
       post :mark_best, on: :member
     end
   end

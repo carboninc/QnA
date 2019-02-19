@@ -1,9 +1,12 @@
 .row
-  .col-3
-    .card.shadow
+  .col-12
+    .card.shadow-sm
       h5.card-header Reward
       .card-body
-        h5 = reward.name
-        p.card-text = link_to reward.question.title, question_path(reward.question)
-        - if reward.image.attached?
-          = image_tag(reward.image, alt: reward.name, size: "150x150")
+        .row
+          .col-3
+            - if reward.image.attached?
+              = image_tag(reward.image, alt: reward.name, size: "150x150")
+          .col-9
+            h5 = reward.name
+            p.card-text = link_to reward.question.title, question_path(reward.question)

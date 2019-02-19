@@ -1,0 +1,7 @@
+div class = "vote-#{resource.class.to_s.downcase}-block-id-#{resource.id}"
+  p.vote-element = link_to polymorphic_path([:vote_up, resource]), method: :post, remote: true, data: { type: 'json' }, class: 'vote-up' do
+    = fa_icon 'caret-up 4x'
+  p.vote-element
+    b class = "rating-#{resource.id}" = resource.rating
+  p.vote-element = link_to polymorphic_path([:vote_down, resource]), method: :post, remote: true, data: { type: 'json' }, class: 'vote-down' do
+    = fa_icon 'caret-down 4x'

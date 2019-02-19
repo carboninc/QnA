@@ -1,39 +1,65 @@
 .row.d-flex.justify-content-center
   .col-10
-    h1.mt-2 = question.title
+    h1.mt-4 = question.title
+    hr
 
-    p = question.body
+    .errors
+
+    .row
+      .col-1.text-center
+        = render 'shared/vote_links', resource: question
+      .col-11
+        p = question.body
+
+        hr
+
+        -if question.files.attached?
+          h5 Attached Files:
+          ul.list-inline
+          - question.files.each do |file|
+            li.list-inline-item
+              p = link_to file.filename.to_s, url_for(file)
+
+        hr
+
+        -if question.links.present?
+          h5 Links And Gists:
+          ul
+            - question.links.each do |link|
+              li class = "link-#{link.id}"
+                - if link.gist?
+                  p.badge.badge-primary.mr-2 Gist Text:
+                  = link.gist_content
+                - else
+                  = link_to link.name, link.url
+                - if current_user&.author?(question)
+                  = link_to 'Delete Link', link_path(link), method: :delete, remote: true, class: 'float-right text-danger'
+
+        hr
+
+        - if question.reward.present?
+          .reward
+            = render question.reward
+
+    hr
+
+    h5
+      | Answers (
+      -if question.answers.count > 0
+        = question.answers.count
+      | ):
 
     .answer-errors
       = render 'shared/errors', resource: answer
-
-    -if question.files.attached?
-      - question.files.each do |file|
-        p = link_to file.filename.to_s, url_for(file)
-
-    -if question.links.present?
-      .links.border.p-2
-        h5
-          b Links And Gists:
-        ul
-          - question.links.each do |link|
-            li class = "link-#{link.id}"
-              - if link.gist?
-                p.badge.badge-primary.mr-2 Gist Text:
-                = link.gist_content
-              - else
-                = link_to link.name, link.url
-              - if current_user&.author?(question)
-                = link_to 'Delete Link', link_path(link), method: :delete, remote: true
-
-    - if question.reward.present?
-      .reward
-        = render question.reward
 
     hr
 
     .answers
       = render question.answers.sort_by_best
+
+    hr
+
+    h5 Leave your answer:
 
     = form_with model: [question, answer], class: 'new-answer' do |f|
       .form-group
@@ -48,4 +74,5 @@
           = render 'links/link_fields', f: link
         .links
           = link_to_add_association 'Add New List', f, :links, class: 'my-3 btn btn-success', partial: 'links/link_fields'
-      = f.submit 'Post Your Answer', class: 'btn btn-success'
+      hr
+      = f.submit 'Post Your Answer', class: 'btn btn-success btn-block'

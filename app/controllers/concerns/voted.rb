@@ -28,7 +28,7 @@ module Voted
 
   def vote(type)
     if current_user.author?(@voteable)
-      render json: { errors: "You can not vote for your #{model_klass.to_s.downcase}" }, status: 422
+      render json: { errors: "You can not vote for your #{model_klass.to_s.downcase}" }, status: 403
     else
       @voteable.send(type, current_user)
       render json: { rating: @voteable.rating, id: @voteable.id }

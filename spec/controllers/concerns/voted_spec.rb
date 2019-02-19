@@ -17,7 +17,7 @@ shared_examples 'voted' do
 
       it 'Voting up error' do
         post :vote_down, params: { id: resource }, format: :json
-        expect(response).to have_http_status 422
+        expect(response).to have_http_status 403
       end
     end
   end
@@ -36,7 +36,7 @@ shared_examples 'voted' do
 
       it 'Voting down error' do
         patch :vote_down, params: { id: resource }, format: :json
-        expect(response).to have_http_status 422
+        expect(response).to have_http_status 403
       end
     end
   end

@@ -28,6 +28,6 @@ module Voteable
   end
 
   def user_vote(user)
-    votes.find_by(user_id: user.id)
+    @user_vote ||= votes.find_by(user_id: user.id)
   end
 end

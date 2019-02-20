@@ -2,6 +2,7 @@ doctype html
 html
   head
     title QnA
+    = action_cable_meta_tag
     = csrf_meta_tags
     = csp_meta_tag
 
@@ -11,7 +12,9 @@ html
   body.bg-pattern
     = render 'shared/nav'
 
-    .container.bg-light.shadow
+    .container.bg-light.shadow.mb-60.mt-60
       = yield
       p.notice = notice
       p.alert = alert
+
+    = render 'shared/footer'

@@ -1,0 +1,5 @@
+= form_with model: [resource, resource.comments.new], remote: true, class: 'new_comment' do |f|
+  .form-group
+    = f.label :body, 'Comment'
+    = f.text_area :body, class: 'form-control'
+  = f.submit 'Add comment', class: 'btn btn-success'

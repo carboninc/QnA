@@ -4,6 +4,7 @@
 class CommentsController < ActionController::Base
   before_action :authenticate_user!
   before_action :find_resource, only: :create
+  after_action :publish_comment, only: :create
 
   expose :comment
 
@@ -12,6 +13,16 @@ class CommentsController < ActionController::Base
   end
 
   private
+
+  def publish_comment
+    return if comment.errors.any?
+
+    resource = @resource.is_a?(Question) ? @resource.id : @resource.question.id
+    ActionCable.server.broadcast(
+      "comments_question_#{resource}",
+      comment: comment
+    )
+  end
 
   def find_resource
     return @resource = Answer.find(params[:answer_id]) if params[:answer_id]

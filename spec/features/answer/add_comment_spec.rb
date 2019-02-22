@@ -40,4 +40,31 @@ feature 'Add comment to answer', "
       expect(page).to have_content "Body can't be blank"
     end
   end
+
+  context 'multiple sessions' do
+    scenario "comment appears on another user's page", js: true do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        within '.add-answer-comment' do
+          fill_in 'Comment', with: 'Answer Comment'
+          click_on 'Add comment'
+          expect(page).to have_content 'Answer Comment'
+        end
+      end
+
+      Capybara.using_session('guest') do
+        within '.add-answer-comment' do
+          expect(page).to have_content 'Answer Comment'
+        end
+      end
+    end
+  end
 end

@@ -3,6 +3,9 @@
     h1.mt-4 = question.title
     hr
 
+    .question-errors
+      = render 'shared/errors', resource: question
+
     .errors
 
     .row
@@ -40,6 +43,19 @@
         - if question.reward.present?
           .reward
             = render question.reward
+
+        hr
+
+        .row.add-question-comment
+          .col-12
+            - if user_signed_in?
+              h5 Add Comment:
+              = render 'comments/form', resource: question
+              hr
+            h5 Comments:
+            hr
+            .question-comments
+              = render question.comments
 
     hr
 

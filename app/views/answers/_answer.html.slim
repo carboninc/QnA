@@ -66,3 +66,16 @@ li.list-group-item id = "answer-block-#{answer.id}"
             - if current_user&.author?(answer)
               = link_to 'Edit', '#', class: 'edit-answer-link btn btn-primary', data: {answer_id: answer.id}
               = link_to 'Delete', answer, method: :delete, remote: true, class: 'btn btn-danger'
+
+      hr
+
+      .row.add-answer-comment
+        .col-12
+          - if user_signed_in?
+            h5 Add Comment:
+            = render 'comments/form', resource: answer
+            hr
+          h5 Comments:
+          hr
+          .answer-comments
+            = render answer.comments

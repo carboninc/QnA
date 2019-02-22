@@ -1,0 +1,40 @@
+li.list-group-item id = "answer-block-#{@answer.id}"
+  .row.d-flex.align-items-center
+    .col-12
+      .row
+        .col-1.text-center
+          div class = "vote-answer-block-id-#{@answer.id}"
+            p.vote-element
+              a.vote-up data-type="json" data-remote="true" rel="nofollow" data-method="post" href="/answers/#{@answer.id}/vote_up"
+                i.fa.fa-caret-up.fa-4x
+            p.vote-element
+              b class="rating-#{@answer.id}" 0
+            p.vote-element
+              a.vote-down data-type="json" data-remote="true" rel="nofollow" data-method="post" href="/answers/#{@answer.id}/vote_down"
+                i.fa.fa-caret-down.fa-4x
+        .col-11
+          p #{@answer.body}
+
+          hr
+
+          - if @files.length
+            h5 Attached Files:
+            ul
+              - for file in @files
+                li
+                  a href="#{file.url}" = file.name
+                    
+          hr
+
+          - if @links.length
+            .links
+              h5 Links And Gists:
+              ul
+                - for link in @links
+                  li
+                    - if link.gist_content.length
+                      p.badge.badge-primary.mr-2 Gist Text:
+                      span = link.gist_content
+                    - else
+                      a href="#{link.url}" = link.name
+          hr

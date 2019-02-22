@@ -2,9 +2,11 @@
 
 # ------------------------------------------------
 class AnswersController < ApplicationController
-  before_action :authenticate_user!
-
   include Voted
+  include AnswersHelper
+
+  before_action :authenticate_user!
+  after_action :publish_answer, only: [:create]
 
   expose :answer
   expose :question, -> { Question.find(params[:question_id]) }
@@ -28,6 +30,17 @@ class AnswersController < ApplicationController
   end
 
   private
+
+  def publish_answer
+    return if answer.errors.any?
+
+    ActionCable.server.broadcast(
+      "answers_question_#{question.id}",
+      answer: answer,
+      files: cable_files_url(answer),
+      links: cable_links_and_gists(answer)
+    )
+  end
 
   def answer_params
     params.require(:answer).permit(

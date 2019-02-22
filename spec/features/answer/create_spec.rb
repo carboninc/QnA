@@ -50,4 +50,74 @@ feature 'User can create answer', "
 
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end
+
+  context 'multiple sessions' do
+    given(:other_user) { create(:user) }
+    given(:url) { 'https://google.com' }
+    given(:gist_url) { 'https://gist.github.com/carboninc/42673bd84ded0cfc7093dee0697bd7c4' }
+
+    scenario "answer appears on another user's page", js: true do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('other_user') do
+        sign_in(other_user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        fill_in 'Body', with: 'answer text'
+
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+
+        within('.nested-fields:nth-child(1)') do
+          fill_in 'Link name', with: 'My Gist'
+          fill_in 'Url', with: gist_url
+        end
+
+        click_on 'Add New List'
+
+        within('.nested-fields:nth-child(2)') do
+          fill_in 'Link name', with: 'Google'
+          fill_in 'Url', with: url
+        end
+
+        click_on 'Post Your Answer'
+
+        expect(page).to have_content 'answer text'
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+        within '.answers' do
+          expect(page).to have_content 'Test'
+          expect(page).to have_link 'Google', href: url
+        end
+      end
+
+      Capybara.using_session('other_user') do
+        expect(page).to have_content 'answer text'
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+        within '.answers' do
+          expect(page).to have_content 'Test'
+          expect(page).to have_link 'Google', href: url
+        end
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content 'answer text'
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+        within '.answers' do
+          expect(page).to have_content 'Test'
+          expect(page).to have_link 'Google', href: url
+        end
+      end
+    end
+  end
 end

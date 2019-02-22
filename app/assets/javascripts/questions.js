@@ -23,7 +23,7 @@ $(document).on('turbolinks:load', function() {
 
     App.cable.subscriptions.create('QuestionsChannel', {
         connected: function() {
-            console.log('Connected!');
+            console.log('Question Channel Connected!');
             return this.perform('follow');
         },
         received: function(data) {

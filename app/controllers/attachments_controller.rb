@@ -8,6 +8,6 @@ class AttachmentsController < ApplicationController
 
   def destroy
     authorize! :destroy, file
-    file.purge if current_user.author?(file.record)
+    file.purge
   end
 end

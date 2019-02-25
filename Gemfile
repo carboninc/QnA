@@ -37,6 +37,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'aws-sdk-s3', require: false
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'bootstrap', '~> 4.2.1'
+gem 'cancancan'
 gem 'cocoon'
 gem 'decent_exposure', '3.0.0'
 gem 'devise'

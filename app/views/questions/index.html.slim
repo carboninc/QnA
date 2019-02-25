@@ -4,8 +4,9 @@
     .col-3
       h2 A list of questions
     .col-7
-      nav.nav.justify-content-end
-        = link_to 'Ask question', new_question_path, class: 'btn btn-success'
+      - if can? :create, Question
+        nav.nav.justify-content-end
+          = link_to 'Ask question', new_question_path, class: 'btn btn-success'
     .col-1
 
 ul.list-group.list-group-flush

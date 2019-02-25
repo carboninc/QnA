@@ -35,7 +35,7 @@
                   = link.gist_content
                 - else
                   = link_to link.name, link.url
-                - if current_user&.author?(question)
+                - if can? :destroy, link
                   = link_to 'Delete Link', link_path(link), method: :delete, remote: true, class: 'float-right text-danger'
 
         hr
@@ -48,7 +48,7 @@
 
         .row.add-question-comment
           .col-12
-            - if user_signed_in?
+            - if can? :create, Comment
               h5 Add Comment:
               = render 'comments/form', resource: question
               hr
@@ -76,19 +76,21 @@
     hr
 
     h5 Leave your answer:
-
-    = form_with model: [question, answer], class: 'new-answer' do |f|
-      .form-group
-        = f.label :body
-        = f.text_area :body, class: 'form-control'
-      .form-group
-        = f.label :files, class: 'mr-2'
-        = f.file_field :files, multiple: true, direct_upload: true
-      p Links:
-      #links
-        = f.fields_for :links do |link|
-          = render 'links/link_fields', f: link
-        .links
-          = link_to_add_association 'Add New List', f, :links, class: 'my-3 btn btn-success', partial: 'links/link_fields'
-      hr
-      = f.submit 'Post Your Answer', class: 'btn btn-success btn-block'
+    - if can? :create, Answer
+      = form_with model: [question, answer], class: 'new-answer' do |f|
+        .form-group
+          = f.label :body
+          = f.text_area :body, class: 'form-control'
+        .form-group
+          = f.label :files, class: 'mr-2'
+          = f.file_field :files, multiple: true, direct_upload: true
+        p Links:
+        #links
+          = f.fields_for :links do |link|
+            = render 'links/link_fields', f: link
+          .links
+            = link_to_add_association 'Add New List', f, :links, class: 'my-3 btn btn-success', partial: 'links/link_fields'
+        hr
+        = f.submit 'Post Your Answer', class: 'btn btn-success btn-block'
+    - else
+      p Log in or Sign Up to post answers

@@ -2,6 +2,8 @@
 
 # ------------------------------------------------
 class OauthCallbacksController < Devise::OmniauthCallbacksController
+  skip_authorization_check
+
   def github
     log_in_with('Github')
   end

@@ -46,9 +46,9 @@ feature 'User can create answer', "
 
   scenario 'Unauthenticated user tries to post answer' do
     visit question_path(question)
-    click_on 'Post Your Answer'
 
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to have_content 'Log in or Sign Up to post answers'
+    expect(page).to_not have_link 'Post Your Answer'
   end
 
   context 'multiple sessions' do

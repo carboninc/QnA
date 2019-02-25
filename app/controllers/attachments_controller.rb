@@ -4,8 +4,10 @@
 class AttachmentsController < ApplicationController
   before_action :authenticate_user!
 
+  expose :file, -> { ActiveStorage::Attachment.find(params[:id]) }
+
   def destroy
-    @file = ActiveStorage::Attachment.find(params[:id])
-    @file.purge if current_user.author?(@file.record)
+    authorize! :destroy, file
+    file.purge if current_user.author?(file.record)
   end
 end

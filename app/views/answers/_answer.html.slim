@@ -35,7 +35,7 @@ li.list-group-item id = "answer-block-#{answer.id}"
                       = link.gist_content
                     - else
                       = link_to link.name, link.url
-                    - if current_user&.author?(answer)
+                    - if can? :destroy, link
                       = link_to 'Delete Link', link_path(link), method: :delete, remote: true, class: 'float-right text-danger'
           hr
 
@@ -61,17 +61,18 @@ li.list-group-item id = "answer-block-#{answer.id}"
         .col-8
         .col-4.text-right
           .btn-group role='group' aria-label='Answer Controls'
-            - if current_user&.author?(question) && !answer&.best
+            - if can? :mark_best, answer
               = link_to 'Best answer', mark_best_answer_path(answer), method: :post, remote: true, class: 'best-answer-link btn btn-success'
-            - if current_user&.author?(answer)
+            - if can? :update, answer
               = link_to 'Edit', '#', class: 'edit-answer-link btn btn-primary', data: {answer_id: answer.id}
+            - if can? :destroy, answer
               = link_to 'Delete', answer, method: :delete, remote: true, class: 'btn btn-danger'
 
       hr
 
       .row.add-answer-comment
         .col-12
-          - if user_signed_in?
+          - if can? :create, Comment
             h5 Add Comment:
             = render 'comments/form', resource: answer
             hr

@@ -6,6 +6,8 @@ class LinksController < ApplicationController
 
   expose :link
 
+  authorize_resource
+
   def destroy
     link.destroy if current_user.author?(link.linkable)
   end

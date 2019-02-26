@@ -11,6 +11,8 @@ class QuestionsController < ApplicationController
   expose :question, scope: -> { Question.with_attached_files }
   expose :answer, -> { Answer.new }
 
+  authorize_resource
+
   def new
     question.links.new
     question.reward = Reward.new

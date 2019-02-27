@@ -38,5 +38,7 @@ class Ability
     can [:vote_up, :vote_down], [Question, Answer] do |voteable|
       !user.author?(voteable) && !voteable.votes.exists?(user_id: user.id)
     end
+
+    can :me, User, id: user.id
   end
 end

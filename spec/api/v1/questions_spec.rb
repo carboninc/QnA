@@ -58,7 +58,7 @@ describe 'Questions API', type: :request do
         end
 
         it_behaves_like 'Return public field' do
-          let(:array) { %w[id body user_id created_at updated_at] }
+          let(:array) { %w[id body created_at updated_at best] }
           let(:json_object) { answer_response }
           let(:object) { answer }
         end
@@ -124,6 +124,69 @@ describe 'Questions API', type: :request do
           let(:json_object) { link_response }
           let(:object) { link }
         end
+      end
+    end
+  end
+
+  describe 'POST /api/v1/questions' do
+    it_behaves_like 'API Authorizable' do
+      let(:api_path) { '/api/v1/questions' }
+      let(:method) { :post }
+      let(:headers) do
+        { ACCEPT: 'application/json' }
+      end
+    end
+
+    context 'authorized' do
+      let(:post_question) { post '/api/v1/questions', params: { question: attributes_for(:question), format: :json, access_token: access_token.token } }
+
+      it 'post question' do
+        post_question
+        expect(response).to be_successful
+      end
+    end
+  end
+
+  describe 'UPDATE /api/v1/questions/id' do
+    let!(:question) { create(:question, user: user) }
+    it_behaves_like 'API Authorizable' do
+      let(:api_path) { "/api/v1/questions/#{question.id}" }
+      let(:method) { :patch }
+      let(:headers) do
+        { ACCEPT: 'application/json' }
+      end
+    end
+
+    context 'authorized' do
+      before { patch "/api/v1/questions/#{question.id}", params: { access_token: access_token.token, question: { title: '123456' } } }
+
+      it_behaves_like 'Response Successful'
+
+      it 'Update question' do
+        question.reload
+        expect(question.title).to eq '123456'
+      end
+    end
+  end
+
+  describe 'DESTROY /api/v1/questions/id' do
+    let!(:question) { create(:question, user: user) }
+    it_behaves_like 'API Authorizable' do
+      let(:api_path) { "/api/v1/questions/#{question.id}" }
+      let(:method) { :patch }
+      let(:headers) do
+        { ACCEPT: 'application/json' }
+      end
+    end
+
+    context 'authorized' do
+      it 'check status after destroy question' do
+        delete "/api/v1/questions/#{question.id}", params: { access_token: access_token.token }
+        expect(response).to be_successful
+      end
+
+      it 'check question after destroy' do
+        expect { delete "/api/v1/questions/#{question.id}", params: { access_token: access_token.token } }.to change(Question, :count).by(-1)
       end
     end
   end

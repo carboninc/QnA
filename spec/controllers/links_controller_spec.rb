@@ -27,9 +27,8 @@ RSpec.describe LinksController, type: :controller do
       expect { delete :destroy, params: { id: other_link.id }, format: :js }.not_to change(Link, :count)
     end
 
-    it 'render destroy view' do
-      delete :destroy, params: { id: link.id }, format: :js
-      expect(response).to render_template :destroy
+    it_behaves_like 'Render destroy template' do
+      let(:params) { { id: link.id } }
     end
   end
 end

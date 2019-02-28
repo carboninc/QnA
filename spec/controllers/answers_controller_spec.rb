@@ -21,24 +21,24 @@ RSpec.describe AnswersController, type: :controller do
     before { login(user) }
 
     context 'with valid attributes' do
-      it 'saves a new answer in the database' do
-        expect { post :create, params: { question_id: question, answer: attributes_for(:answer) }, format: :js }.to change(question.answers, :count).by(1)
+      it_behaves_like 'Create object in database' do
+        let(:params) { { question_id: question, answer: attributes_for(:answer) } }
+        let(:object) { question.answers }
       end
 
-      it 'renders create template' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer) }, format: :js
-        expect(response).to render_template :create
+      it_behaves_like 'Render create template' do
+        let(:params) { { question_id: question, answer: attributes_for(:answer) } }
       end
     end
 
     context 'with invalid attributes' do
-      it 'does not save the answer' do
-        expect { post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }, format: :js }.to_not change(Answer, :count)
+      it_behaves_like 'Does not create object in database' do
+        let(:params) { { question_id: question, answer: attributes_for(:answer, :invalid) } }
+        let(:object) { Answer }
       end
 
-      it 'renders create template' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }, format: :js
-        expect(response).to render_template :create
+      it_behaves_like 'Render create template' do
+        let(:params) { { question_id: question, answer: attributes_for(:answer, :invalid) } }
       end
     end
   end
@@ -55,9 +55,8 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.body).to eq answer.body
       end
 
-      it 'renders update view' do
-        patch :update, params: { id: answer, answer: attributes_for(:answer) }, format: :js
-        expect(response).to render_template :update
+      it_behaves_like 'Render update template' do
+        let(:params) { { id: answer, answer: attributes_for(:answer) } }
       end
     end
 
@@ -68,9 +67,8 @@ RSpec.describe AnswersController, type: :controller do
         end.to_not change(answer, :body)
       end
 
-      it 'renders update view' do
-        patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
-        expect(response).to render_template :update
+      it_behaves_like 'Render update template' do
+        let(:params) { { id: answer, answer: attributes_for(:answer, :invalid) } }
       end
     end
 
@@ -81,9 +79,8 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.body).to eq answer.body
       end
 
-      it 'renders update view' do
-        patch :update, params: { id: answer, answer: attributes_for(:answer) }, format: :js
-        expect(response).to render_template :update
+      it_behaves_like 'Render update template' do
+        let(:params) { { id: answer, answer: attributes_for(:answer) } }
       end
     end
 
@@ -96,9 +93,8 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.body).not_to eq 'other_answer'
       end
 
-      it 'renders update view' do
-        patch :update, params: { id: answer, answer: attributes_for(:answer) }, format: :js
-        expect(response).to render_template :update
+      it_behaves_like 'Render update template' do
+        let(:params) { { id: answer, answer: attributes_for(:answer) } }
       end
     end
   end
@@ -117,9 +113,8 @@ RSpec.describe AnswersController, type: :controller do
         expect { delete :destroy, params: { id: answer }, format: :js }.to change(Answer, :count).by(-1)
       end
 
-      it 'renders destroy view' do
-        delete :destroy, params: { id: answer }, format: :js
-        expect(response).to render_template :destroy
+      it_behaves_like 'Render destroy template' do
+        let(:params) { { id: answer } }
       end
     end
 
@@ -128,9 +123,8 @@ RSpec.describe AnswersController, type: :controller do
         expect { delete :destroy, params: { id: other_answer }, format: :js }.not_to change(Answer, :count)
       end
 
-      it 'renders destroy view' do
-        delete :destroy, params: { id: other_answer }, format: :js
-        expect(response).to render_template :destroy
+      it_behaves_like 'Render destroy template' do
+        let(:params) { { id: other_answer } }
       end
     end
   end
@@ -144,9 +138,7 @@ RSpec.describe AnswersController, type: :controller do
         expect { answer.reload }.to change { answer.best }.from(false).to(true)
       end
 
-      it 'renders best template' do
-        expect(response).to render_template :mark_best
-      end
+      it_behaves_like 'Render best template'
     end
 
     context 'Not the owner of the question is trying to mark the answer as the best' do
@@ -157,9 +149,7 @@ RSpec.describe AnswersController, type: :controller do
         expect { answer.reload }.not_to change(answer, :best)
       end
 
-      it 'renders best template' do
-        expect(response).to render_template :mark_best
-      end
+      it_behaves_like 'Render best template'
     end
   end
 end

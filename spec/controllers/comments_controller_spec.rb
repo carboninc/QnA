@@ -16,9 +16,8 @@ RSpec.describe CommentsController, type: :controller do
         expect { post :create, params: { question_id: question, comment: attributes_for(:comment) }, format: :js }.to change(user.comments, :count).by(1)
       end
 
-      it 'render create template' do
-        post :create, params: { question_id: question, comment: attributes_for(:comment) }, format: :js
-        expect(response).to render_template :create
+      it_behaves_like 'Render create template' do
+        let(:params) { { question_id: question, comment: attributes_for(:comment) } }
       end
     end
 
@@ -27,9 +26,8 @@ RSpec.describe CommentsController, type: :controller do
         expect { post :create, params: { question_id: question, comment: attributes_for(:comment, :invalid) }, format: :js }.to_not change(question.comments, :count)
       end
 
-      it 'render create template' do
-        post :create, params: { question_id: question, comment: attributes_for(:comment, :invalid) }, format: :js
-        expect(response).to render_template :create
+      it_behaves_like 'Render create template' do
+        let(:params) { { question_id: question, comment: attributes_for(:comment, :invalid) } }
       end
     end
   end

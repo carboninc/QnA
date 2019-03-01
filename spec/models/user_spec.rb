@@ -9,6 +9,7 @@ RSpec.describe User, type: :model do
   it { should have_many(:votes).dependent(:destroy) }
   it { should have_many(:comments) }
   it { should have_many(:authorizations).dependent(:destroy) }
+  it { should have_many(:subscriptions) }
 
   describe '.find_for_oauth' do
     let!(:user) { create(:user) }
@@ -36,6 +37,22 @@ RSpec.describe User, type: :model do
 
     it 'is not author of question' do
       expect(user).not_to be_author(other_question)
+    end
+  end
+
+  describe '#subscribed?' do
+    let!(:user) { create(:user) }
+    let!(:question) { create(:question, user: user) }
+    let!(:subscription) { create(:subscription, question: question, user: user) }
+
+    let!(:other_user) { create(:user) }
+
+    it 'User subscribed to question' do
+      expect(user).to be_subscribed(subscription.question)
+    end
+
+    it 'User not subscribed to question' do
+      expect(other_user).to_not be_subscribed(subscription.question)
     end
   end
 end

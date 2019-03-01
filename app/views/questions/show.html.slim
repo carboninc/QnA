@@ -1,6 +1,15 @@
 .row.d-flex.justify-content-center
   .col-10
-    h1.mt-4 = question.title
+    .row
+      .col-10
+        h1.mt-4 = question.title
+      .col-2.mt-4
+        - if can?(:create, Subscription) || can?(:destroy, @subscription)
+          .subscription
+            - if current_user.subscribed?(question)
+              = link_to 'Unsubscribe', subscription_path(@subscription), method: :delete, remote: true, class: 'unsubscribe btn btn-danger'
+            - else
+              = link_to 'Subscribe', question_subscriptions_path(question), method: :post, remote: true, class: 'subscribe btn btn-success'
     hr
 
     .question-errors

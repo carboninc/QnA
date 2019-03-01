@@ -61,5 +61,7 @@ describe Ability, type: :model do
 
     it { should be_able_to :vote_up, other_answer }
     it { should be_able_to :vote_down, other_answer }
+
+    it { should be_able_to :me, User }
   end
 end

@@ -25,13 +25,9 @@ RSpec.describe OauthCallbacksController, type: :controller do
         get :github
       end
 
-      it 'login user' do
-        expect(subject.current_user).to eq user
-      end
+      it_behaves_like 'Login user'
 
-      it 'redirects to root path' do
-        expect(response).to redirect_to root_path
-      end
+      it_behaves_like 'Redirect to root path'
     end
 
     context 'user does not exist' do
@@ -40,13 +36,9 @@ RSpec.describe OauthCallbacksController, type: :controller do
         get :github
       end
 
-      it 'redirects to root path' do
-        expect(response).to redirect_to root_path
-      end
+      it_behaves_like 'Redirect to root path'
 
-      it 'does not login user' do
-        expect(subject.current_user).to_not be
-      end
+      it_behaves_like 'Does not login user'
     end
   end
 
@@ -68,13 +60,9 @@ RSpec.describe OauthCallbacksController, type: :controller do
         get :vkontakte
       end
 
-      it 'login user' do
-        expect(subject.current_user).to eq user
-      end
+      it_behaves_like 'Login user'
 
-      it 'redirects to root path' do
-        expect(response).to redirect_to root_path
-      end
+      it_behaves_like 'Redirect to root path'
     end
 
     context 'user does not exist' do
@@ -83,13 +71,9 @@ RSpec.describe OauthCallbacksController, type: :controller do
         get :vkontakte
       end
 
-      it 'redirects to root path' do
-        expect(response).to redirect_to root_path
-      end
+      it_behaves_like 'Redirect to root path'
 
-      it 'does not login user' do
-        expect(subject.current_user).to_not be
-      end
+      it_behaves_like 'Does not login user'
     end
   end
 end

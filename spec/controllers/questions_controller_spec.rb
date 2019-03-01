@@ -40,8 +40,9 @@ RSpec.describe QuestionsController, type: :controller do
     before { login(user) }
 
     context 'with valid attributes' do
-      it 'saves a new question in the database' do
-        expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
+      it_behaves_like 'Create object in database' do
+        let(:params) { { question: attributes_for(:question) } }
+        let(:object) { Question }
       end
 
       it 'redirects to show view' do
@@ -51,8 +52,9 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'with invalid attributes' do
-      it 'does not save the question' do
-        expect { post :create, params: { question: attributes_for(:question, :invalid) } }.to_not change(Question, :count)
+      it_behaves_like 'Does not create object in database' do
+        let(:params) { { question: attributes_for(:question, :invalid) } }
+        let(:object) { Question }
       end
 
       it 're-render new view' do
@@ -79,9 +81,8 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.body).to eq 'new body'
       end
 
-      it 'renders update view' do
-        patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
-        expect(response).to render_template :update
+      it_behaves_like 'Render update template' do
+        let(:params) { { id: question, question: attributes_for(:question) } }
       end
     end
 
@@ -107,9 +108,8 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.title).to eq question.title
       end
 
-      it 'renders update view' do
-        patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
-        expect(response).to render_template :update
+      it_behaves_like 'Render update template' do
+        let(:params) { { id: question, question: attributes_for(:question) } }
       end
     end
 

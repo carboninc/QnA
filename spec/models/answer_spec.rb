@@ -21,8 +21,8 @@ RSpec.describe Answer, type: :model do
 
   it { should accept_nested_attributes_for :links }
 
-  it 'have many attached files' do
-    expect(Answer.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
+  it_behaves_like 'Check many attached files' do
+    let(:object) { Answer }
   end
 
   describe 'best answer and get reward' do

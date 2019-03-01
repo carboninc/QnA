@@ -20,7 +20,7 @@ class Question < ApplicationRecord
   validates :title, :body, presence: true
 
   after_create :calculate_reputation
-  after_create_commit :subscribe_author
+  after_create :subscribe_author
 
   scope :last_day, -> { where('created_at >= ?', 1.day.ago) }
 

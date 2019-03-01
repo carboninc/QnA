@@ -33,7 +33,7 @@ describe 'Answers API', type: :request do
       end
 
       it_behaves_like 'Return public field' do
-        let(:array) { %w[id body question_id created_at updated_at best] }
+        let(:attributes) { %w[id body question_id created_at updated_at best] }
         let(:json_object) { answer_response }
         let(:object) { answer }
       end
@@ -62,7 +62,7 @@ describe 'Answers API', type: :request do
       it_behaves_like 'Response Successful'
 
       it_behaves_like 'Return public field' do
-        let(:array) { %w[id body question_id created_at updated_at best] }
+        let(:attributes) { %w[id body question_id created_at updated_at best] }
         let(:json_object) { answer_response }
         let(:object) { answer }
       end
@@ -77,7 +77,7 @@ describe 'Answers API', type: :request do
         end
 
         it_behaves_like 'Return public field' do
-          let(:array) { %w[id body user_id created_at updated_at] }
+          let(:attributes) { %w[id body user_id created_at updated_at] }
           let(:json_object) { comment_response }
           let(:object) { comment }
         end
@@ -93,7 +93,7 @@ describe 'Answers API', type: :request do
         end
 
         it_behaves_like 'Return public field' do
-          let(:array) { %w[id name url created_at updated_at] }
+          let(:attributes) { %w[id name url created_at updated_at] }
           let(:json_object) { link_response }
           let(:object) { link }
         end

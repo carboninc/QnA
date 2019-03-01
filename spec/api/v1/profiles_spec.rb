@@ -23,13 +23,13 @@ describe 'Profiles API', type: :request do
       it_behaves_like 'Response Successful'
 
       it_behaves_like 'Return public field' do
-        let(:array) { %w[id email admin created_at updated_at] }
+        let(:attributes) { %w[id email admin created_at updated_at] }
         let(:json_object) { json }
         let(:object) { me }
       end
 
       it_behaves_like 'Does not return private fields' do
-        let(:array) { %w[password encrypted_password] }
+        let(:attributes) { %w[password encrypted_password] }
         let(:json_object) { json }
       end
     end
@@ -61,7 +61,7 @@ describe 'Profiles API', type: :request do
       end
 
       it_behaves_like 'Does not return private fields' do
-        let(:array) { %w[password encrypted_password] }
+        let(:attributes) { %w[password encrypted_password] }
         let(:json_object) { json.first }
       end
 

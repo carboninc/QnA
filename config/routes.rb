@@ -34,8 +34,8 @@ Rails.application.routes.draw do
         get :me, on: :collection
       end
 
-      resources :questions, except: :edit do
-        resources :answers, except: :edit, shallow: true
+      resources :questions, except: %i[new edit] do
+        resources :answers, except: %i[new edit], shallow: true
       end
     end
   end

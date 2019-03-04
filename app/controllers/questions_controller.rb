@@ -5,6 +5,7 @@ class QuestionsController < ApplicationController
   include Voted
 
   before_action :authenticate_user!, except: %i[index show]
+  before_action :load_subscription, only: %i[show update]
   after_action :publish_question, only: [:create]
 
   expose :questions, -> { Question.all }
@@ -58,6 +59,10 @@ class QuestionsController < ApplicationController
         locals: { question: question, current_user: nil }
       )
     )
+  end
+
+  def load_subscription
+    @subscription = question.subscriptions.find_by(user: current_user)
   end
 
   def question_params

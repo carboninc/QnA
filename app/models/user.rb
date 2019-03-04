@@ -14,6 +14,7 @@ class User < ApplicationRecord
   has_many :rewards
   has_many :votes, dependent: :destroy
   has_many :comments
+  has_many :subscriptions
 
   def self.find_for_oauth(auth)
     Services::FindForOauth.new(auth).call
@@ -25,5 +26,9 @@ class User < ApplicationRecord
 
   def author?(obj)
     id == obj.user_id
+  end
+
+  def subscribed?(question)
+    subscriptions.exists?(question: question)
   end
 end

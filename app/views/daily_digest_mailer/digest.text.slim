@@ -1,0 +1,6 @@
+' Daily Digest QnA
+= "\r\n" * 2
+' #{@greeting}
+' Recent questions on our portal for the last day:
+- @questions.each do |question|
+  = link_to question.title, question_path(question)

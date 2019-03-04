@@ -1,0 +1,5 @@
+h1 Daily Digest QnA
+h5 = @greeting
+p Recent questions on our portal for the last day:
+- @questions.each do |question|
+  = link_to question.title, question_path(question)

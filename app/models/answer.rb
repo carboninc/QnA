@@ -16,6 +16,8 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
+  after_create :notify_subscribers
+
   scope :sort_by_best, -> { order best: :desc }
 
   def mark_best
@@ -32,5 +34,9 @@ class Answer < ApplicationRecord
   def awarding
     reward = question.reward
     reward&.update!(answer: self, user: user)
+  end
+
+  def notify_subscribers
+    AnswerNotificationJob.perform_later(self)
   end
 end

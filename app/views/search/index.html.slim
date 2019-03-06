@@ -1,0 +1,7 @@
+.search_results
+  h3 Search results:
+  - if @search_results.empty?
+    span.result Nothing found.
+  - @search_results.each do |result|
+    p.result
+      = show_result(result)

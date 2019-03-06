@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   root to: 'questions#index'
   devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks' }
 
+  get :search, to: 'search#index'
+
   concern :voteable do
     member do
       post :vote_up

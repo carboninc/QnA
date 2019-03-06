@@ -46,6 +46,7 @@ gem 'doorkeeper'
 gem 'font-awesome-rails'
 gem 'gon'
 gem 'jquery-rails'
+gem 'mysql2'
 gem 'octokit', '~> 4.0'
 gem 'oj'
 gem 'omniauth'
@@ -55,6 +56,7 @@ gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'skim'
 gem 'slim-rails'
+gem 'thinking-sphinx'
 gem 'validate_url'
 gem 'whenever', require: false
 
@@ -83,6 +85,7 @@ group :test do
   gem 'launchy'
   gem 'rails-controller-testing'
   gem 'shoulda-matchers'
+  gem 'database_cleaner'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

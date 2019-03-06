@@ -6,10 +6,10 @@ feature 'Search', "
   Like any user
   I would like to be able to use the search on the site
 " do
-  given!(:user) { create(:user, email: 'search@test.com') }
-  given!(:question) { create(:question, user: user, title: 'search') }
-  given!(:answer) { create(:answer, question: question, user: user, body: 'search') }
-  given!(:comment) { create(:comment, commentable: question, user: user, body: 'search') }
+  given!(:user) { create(:user, email: 'searchtest@qna.com') }
+  given!(:question) { create(:question, user: user, title: 'searchtest') }
+  given!(:answer) { create(:answer, question: question, user: user, body: 'searchtest') }
+  given!(:comment) { create(:comment, commentable: question, user: user, body: 'searchtest') }
 
   %w[Questions Answers Comments Users].each do |search_object|
     scenario "search in #{search_object}", js: true do
@@ -17,13 +17,13 @@ feature 'Search', "
         visit questions_path
 
         within '.search' do
-          fill_in 'search_text', with: 'search'
+          fill_in 'search_text', with: 'searchtest'
           select search_object, from: 'search_object'
           click_on 'Search'
         end
 
         within '.search_results' do
-          expect(page).to have_content 'search'
+          expect(page).to have_content 'searchtest'
         end
       end
     end
@@ -34,7 +34,7 @@ feature 'Search', "
       visit questions_path
 
       within('.search') do
-        fill_in 'search_text', with: 'search'
+        fill_in 'search_text', with: 'searchtest'
         select 'All', from: 'search_object'
         click_on 'Search'
       end

@@ -3,4 +3,4 @@
 ' #{@greeting}
 ' Recent questions on our portal for the last day:
 - @questions.each do |question|
-  = link_to question.title, question_path(question)
+  = link_to question.title, question_url(question)

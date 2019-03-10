@@ -1,82 +1,83 @@
-li.list-group-item id = "answer-block-#{answer.id}"
-  .row.d-flex.align-items-center
-    .col-12
-      .row
-        .col-1.text-center
-          = render 'shared/vote_links', resource: answer
-        .col-11
-          -if answer.persisted?
-            -if answer.best
-              span.badge.badge-primary.mr-4.mb-2
-                | Best answer!
-              - if answer.reward.present?
-                .reward.border.border-success.mb-4
-                  = render answer.reward
-            = answer.body
+- cache answer do
+  li.list-group-item id = "answer-block-#{answer.id}"
+    .row.d-flex.align-items-center
+      .col-12
+        .row
+          .col-1.text-center
+            = render 'shared/vote_links', resource: answer
+          .col-11
+            -if answer.persisted?
+              -if answer.best
+                span.badge.badge-primary.mr-4.mb-2
+                  | Best answer!
+                - if answer.reward.present?
+                  .reward.border.border-success.mb-4
+                    = render answer.reward
+              = answer.body
 
-          hr
-
-          - if answer.files.attached?
-            h5 Attached Files:
-            ul
-              - answer.files.each do |file|
-                = render 'answers/file_attached_list', file: file, answer: answer
-
-          hr
-
-          - if answer.links.present?
-            .links
-              h5 Links And Gists:
-              ul
-                - answer.links.each do |link|
-                  li class = "link-#{link.id}"
-                    - if link.gist?
-                      p.badge.badge-primary.mr-2 Gist Text:
-                      = link.gist_content
-                    - else
-                      = link_to link.name, link.url
-                    - if can? :destroy, link
-                      = link_to 'Delete Link', link_path(link), method: :delete, remote: true, class: 'float-right text-danger'
-          hr
-
-          = form_with model: answer, class: 'hidden', html: {id: "edit-answer-#{answer.id}"} do |f|
-            .form-group
-              = f.label :body, 'Your answer'
-              = f.text_area :body, class: 'form-control'
-            .form-group
-              = f.label :files
-              = f.file_field :files, multiple: true, direct_upload: true
-            - if answer.files.attached?
-              - answer.files.each do |file|
-                = render 'answers/file_attached_list', file: file, answer: answer
-            p Links:
-            #links
-              = f.fields_for :links do |link|
-                div id = "answer_nested_form_#{answer.id}"
-                  = render 'links/link_fields', f: link
-              .links
-                = link_to_add_association 'Add New List', f, :links, class: 'my-3 btn btn-success', partial: 'links/link_fields'
-            = f.submit 'Save', class: 'btn btn-success'
-      .row
-        .col-8
-        .col-4.text-right
-          .btn-group role='group' aria-label='Answer Controls'
-            - if can? :mark_best, answer
-              = link_to 'Best answer', mark_best_answer_path(answer), method: :post, remote: true, class: 'best-answer-link btn btn-success'
-            - if can? :update, answer
-              = link_to 'Edit', '#', class: 'edit-answer-link btn btn-primary', data: {answer_id: answer.id}
-            - if can? :destroy, answer
-              = link_to 'Delete', answer, method: :delete, remote: true, class: 'btn btn-danger'
-
-      hr
-
-      .row.add-answer-comment
-        .col-12
-          - if can? :create, Comment
-            h5 Add Comment:
-            = render 'comments/form', resource: answer
             hr
-          h5 Comments:
-          hr
-          .answer-comments
-            = render answer.comments
+
+            - if answer.files.attached?
+              h5 Attached Files:
+              ul
+                - answer.files.each do |file|
+                  = render 'answers/file_attached_list', file: file, answer: answer
+
+            hr
+
+            - if answer.links.present?
+              .links
+                h5 Links And Gists:
+                ul
+                  - answer.links.each do |link|
+                    li class = "link-#{link.id}"
+                      - if link.gist?
+                        p.badge.badge-primary.mr-2 Gist Text:
+                        = link.gist_content
+                      - else
+                        = link_to link.name, link.url
+                      - if can? :destroy, link
+                        = link_to 'Delete Link', link_path(link), method: :delete, remote: true, class: 'float-right text-danger'
+            hr
+
+            = form_with model: answer, class: 'hidden', html: {id: "edit-answer-#{answer.id}"} do |f|
+              .form-group
+                = f.label :body, 'Your answer'
+                = f.text_area :body, class: 'form-control'
+              .form-group
+                = f.label :files
+                = f.file_field :files, multiple: true, direct_upload: true
+              - if answer.files.attached?
+                - answer.files.each do |file|
+                  = render 'answers/file_attached_list', file: file, answer: answer
+              p Links:
+              #links
+                = f.fields_for :links do |link|
+                  div id = "answer_nested_form_#{answer.id}"
+                    = render 'links/link_fields', f: link
+                .links
+                  = link_to_add_association 'Add New List', f, :links, class: 'my-3 btn btn-success', partial: 'links/link_fields'
+              = f.submit 'Save', class: 'btn btn-success'
+        .row
+          .col-8
+          .col-4.text-right
+            .btn-group role='group' aria-label='Answer Controls'
+              - if can? :mark_best, answer
+                = link_to 'Best answer', mark_best_answer_path(answer), method: :post, remote: true, class: 'best-answer-link btn btn-success'
+              - if can? :update, answer
+                = link_to 'Edit', '#', class: 'edit-answer-link btn btn-primary', data: {answer_id: answer.id}
+              - if can? :destroy, answer
+                = link_to 'Delete', answer, method: :delete, remote: true, class: 'btn btn-danger'
+
+        hr
+
+        .row.add-answer-comment
+          .col-12
+            - if can? :create, Comment
+              h5 Add Comment:
+              = render 'comments/form', resource: answer
+              hr
+            h5 Comments:
+            hr
+            .answer-comments
+              = render answer.comments

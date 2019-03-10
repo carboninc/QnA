@@ -1,4 +1,5 @@
-- if comment.persisted?
-  div class="comment_#{comment.id}"
-    = comment.body
-  hr
+- cache comment do
+  - if comment.persisted?
+    div class="comment_#{comment.id}"
+      = comment.body
+    hr

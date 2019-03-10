@@ -1,105 +1,106 @@
-.row.d-flex.justify-content-center
-  .col-10
-    .row
-      .col-10
-        h1.mt-4 = question.title
-      .col-2.mt-4
-        - if can?(:create, Subscription) || can?(:destroy, @subscription)
-          .subscription
-            - if current_user.subscribed?(question)
-              = link_to 'Unsubscribe', subscription_path(@subscription), method: :delete, remote: true, class: 'unsubscribe btn btn-danger'
-            - else
-              = link_to 'Subscribe', question_subscriptions_path(question), method: :post, remote: true, class: 'subscribe btn btn-success'
-    hr
+- cache question do
+  .row.d-flex.justify-content-center
+    .col-10
+      .row
+        .col-10
+          h1.mt-4 = question.title
+        .col-2.mt-4
+          - if can?(:create, Subscription) || can?(:destroy, @subscription)
+            .subscription
+              - if current_user.subscribed?(question)
+                = link_to 'Unsubscribe', subscription_path(@subscription), method: :delete, remote: true, class: 'unsubscribe btn btn-danger'
+              - else
+                = link_to 'Subscribe', question_subscriptions_path(question), method: :post, remote: true, class: 'subscribe btn btn-success'
+      hr
 
-    .question-errors
-      = render 'shared/errors', resource: question
+      .question-errors
+        = render 'shared/errors', resource: question
 
-    .errors
+      .errors
 
-    .row
-      .col-1.text-center
-        = render 'shared/vote_links', resource: question
-      .col-11
-        p = question.body
+      .row
+        .col-1.text-center
+          = render 'shared/vote_links', resource: question
+        .col-11
+          p = question.body
 
-        hr
+          hr
 
-        -if question.files.attached?
-          h5 Attached Files:
-          ul.list-inline
-          - question.files.each do |file|
-            li.list-inline-item
-              p = link_to file.filename.to_s, url_for(file)
+          -if question.files.attached?
+            h5 Attached Files:
+            ul.list-inline
+            - question.files.each do |file|
+              li.list-inline-item
+                p = link_to file.filename.to_s, url_for(file)
 
-        hr
+          hr
 
-        -if question.links.present?
-          h5 Links And Gists:
-          ul
-            - question.links.each do |link|
-              li class = "link-#{link.id}"
-                - if link.gist?
-                  p.badge.badge-primary.mr-2 Gist Text:
-                  = link.gist_content
-                - else
-                  = link_to link.name, link.url
-                - if can? :destroy, link
-                  = link_to 'Delete Link', link_path(link), method: :delete, remote: true, class: 'float-right text-danger'
+          -if question.links.present?
+            h5 Links And Gists:
+            ul
+              - question.links.each do |link|
+                li class = "link-#{link.id}"
+                  - if link.gist?
+                    p.badge.badge-primary.mr-2 Gist Text:
+                    = link.gist_content
+                  - else
+                    = link_to link.name, link.url
+                  - if can? :destroy, link
+                    = link_to 'Delete Link', link_path(link), method: :delete, remote: true, class: 'float-right text-danger'
 
-        hr
+          hr
 
-        - if question.reward.present?
-          .reward
-            = render question.reward
+          - if question.reward.present?
+            .reward
+              = render question.reward
 
-        hr
+          hr
 
-        .row.add-question-comment
-          .col-12
-            - if can? :create, Comment
-              h5 Add Comment:
-              = render 'comments/form', resource: question
+          .row.add-question-comment
+            .col-12
+              - if can? :create, Comment
+                h5 Add Comment:
+                = render 'comments/form', resource: question
+                hr
+              h5 Comments:
               hr
-            h5 Comments:
-            hr
-            .question-comments
-              = render question.comments
+              .question-comments
+                = render question.comments
 
-    hr
+      hr
 
-    h5
-      | Answers (
-      -if question.answers.count > 0
-        = question.answers.count
-      | ):
+      h5
+        | Answers (
+        -if question.answers.count > 0
+          = question.answers.count
+        | ):
 
-    .answer-errors
-      = render 'shared/errors', resource: answer
+      .answer-errors
+        = render 'shared/errors', resource: answer
 
-    hr
+      hr
 
-    .answers
-      = render question.answers.sort_by_best
+      .answers
+        = render question.answers.sort_by_best
 
-    hr
+      hr
 
-    h5 Leave your answer:
-    - if can? :create, Answer
-      = form_with model: [question, answer], class: 'new-answer' do |f|
-        .form-group
-          = f.label :body
-          = f.text_area :body, class: 'form-control'
-        .form-group
-          = f.label :files, class: 'mr-2'
-          = f.file_field :files, multiple: true, direct_upload: true
-        p Links:
-        #links
-          = f.fields_for :links do |link|
-            = render 'links/link_fields', f: link
-          .links
-            = link_to_add_association 'Add New List', f, :links, class: 'my-3 btn btn-success', partial: 'links/link_fields'
-        hr
-        = f.submit 'Post Your Answer', class: 'btn btn-success btn-block'
-    - else
-      p Log in or Sign Up to post answers
+      h5 Leave your answer:
+      - if can? :create, Answer
+        = form_with model: [question, answer], class: 'new-answer' do |f|
+          .form-group
+            = f.label :body
+            = f.text_area :body, class: 'form-control'
+          .form-group
+            = f.label :files, class: 'mr-2'
+            = f.file_field :files, multiple: true, direct_upload: true
+          p Links:
+          #links
+            = f.fields_for :links do |link|
+              = render 'links/link_fields', f: link
+            .links
+              = link_to_add_association 'Add New List', f, :links, class: 'my-3 btn btn-success', partial: 'links/link_fields'
+          hr
+          = f.submit 'Post Your Answer', class: 'btn btn-success btn-block'
+      - else
+        p Log in or Sign Up to post answers
